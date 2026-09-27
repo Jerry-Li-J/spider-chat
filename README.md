@@ -40,6 +40,11 @@ npm run build
 
 Copy the generated `main.js` and `styles.css`, plus `manifest.json`, into `<vault>/.obsidian/plugins/spider-chat/`. Restart Obsidian and enable Spider Chat in Settings → Community plugins. Obsidian 1.8.7 or later is required.
 
+**ChatGPT account (desktop):** In model settings, select **ChatGPT / Codex** to use
+your local `codex login` session without an API key. Refresh the model list, choose
+a model and its reasoning effort, then test the connection. Models and effort
+options come from your installed Codex runtime. See [setup and behavior](docs/chatgpt-codex.md).
+
 1. In Settings → Spider Chat, configure the default model's API URL, key, and model name. OpenAI-compatible Chat Completions endpoints are supported. Keys may also come from a `.env` file in the plugin folder or vault.
 2. Use the ribbon icon to create a map and ask the first question.
 3. Select text in the AI answer and press `Tab` to follow up; click a graph card to switch conversations.
