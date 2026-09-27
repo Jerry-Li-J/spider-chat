@@ -38,10 +38,13 @@ token-limit and HTTP thinking-switch options apply only to API profiles.
   process exit, timeouts and failed turns also clean up the connection. Unloading
   the plugin closes all active Codex connections.
 - The client requests a read-only sandbox in a temporary working directory and
-  instructs Codex to answer conversationally. It does not provide a native tool or
-  approval UI: command/file approvals are declined and unsupported interactive
-  requests receive protocol errors. User-level Codex configuration remains owned
-  by Codex; Spider Chat does not edit it.
+  instructs Codex to answer conversationally. It declines command/file approvals
+  and unsupported interactive requests. **Read-only does not mean text-only:**
+  Codex may still run commands that read local files without asking. Its own
+  configuration may also provide tools or MCP services. Tool results can be sent
+  to the model. Use this connection only if you trust your local Codex setup and
+  the text you send; the OpenAI-compatible API connection remains available for
+  a conventional chat-only request path. Spider Chat does not edit Codex config.
 - API profiles and saved maps remain usable on mobile. A Codex request on mobile
   reports that a desktop runtime is required.
 

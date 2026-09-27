@@ -172,7 +172,13 @@ export async function* streamCodexTurn(
       const item = params.item;
       if (item?.type === "agentMessage" && typeof item.text === "string" && item.phase !== "commentary" && !commentaryItems.has(item.id)) {
         const prior = textByItem.get(item.id) ?? "";
-        if (item.text.startsWith(prior)) emit(item.text.slice(prior.length));
+        // The provider's completed item is authoritative. This append-only stream
+        // cannot replace already emitted text, so fail instead of saving a stale answer.
+        if (!item.text.startsWith(prior)) {
+          fail(new Error("Codex changed a completed answer after streaming. Retry this reply."));
+          return;
+        }
+        emit(item.text.slice(prior.length));
         textByItem.set(item.id, item.text);
       } else if (item?.type === "reasoning" && !reasoningByItem.has(item.id)) {
         if (Array.isArray(item.summary)) onReasoning?.(item.summary.join("\n"));
@@ -230,11 +236,19 @@ export async function* streamCodex(
     signal?.throwIfAborted();
     await checkAccount(connection.client);
     const { instructions, input } = codexConversation(messages);
-    const started = await connection.client.request("thread/start", {
+    const threadParams = {
       model: profile.model, cwd: connection.cwd, ephemeral: true,
-      sandbox: "read-only", approvalPolicy: "never",
-      developerInstructions: instructions,
-    });
+      approvalPolicy: "never", developerInstructions: instructions,
+    };
+    let started: { thread?: { id?: string } };
+    try {
+      started = await connection.client.request("thread/start", { ...threadParams, sandbox: "read-only" });
+    } catch (error) {
+      // Older app-server builds use CLI-style `read-only`; newer protocol builds
+      // document `readOnly`. Retry only when the server rejects that exact variant.
+      if (!(error instanceof Error) || !/unknown variant [`']read-only[`']/.test(error.message)) throw error;
+      started = await connection.client.request("thread/start", { ...threadParams, sandbox: "readOnly" });
+    }
     const threadId = started.thread?.id;
     if (!threadId) throw new Error("Codex did not return a thread ID.");
     signal?.removeEventListener("abort", cancelSetup);

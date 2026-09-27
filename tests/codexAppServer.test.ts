@@ -120,6 +120,16 @@ describe("Codex app-server protocol", () => {
     expect(reasoning).toEqual(["one\ntwo"]);
   });
 
+  it("rejects a completed answer that contradicts already streamed text", async () => {
+    const { client } = server((message, send) => {
+      send({ id: message.id, result: { turn: { id: "t" } } });
+      send({ method: "item/agentMessage/delta", params: { threadId: "s", itemId: "a", delta: "stale answer" } });
+      send({ method: "item/completed", params: { threadId: "s", item: { type: "agentMessage", id: "a", text: "corrected answer" } } });
+      send({ method: "turn/completed", params: { threadId: "s", turn: { id: "t", status: "completed" } } });
+    });
+    await expect(collect(streamCodexTurn(client, "s", "prompt", profile))).rejects.toThrow("changed a completed answer");
+  });
+
   it.each(["failed", "interrupted"])("rejects %s turns instead of saving a successful answer", async (status) => {
     const { client } = server((message, send) => {
       send({ id: message.id, result: { turn: { id: "t" } } });

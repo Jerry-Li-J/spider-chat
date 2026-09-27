@@ -44,6 +44,8 @@ Copy the generated `main.js` and `styles.css`, plus `manifest.json`, into `<vaul
 your local `codex login` session without an API key. Refresh the model list, choose
 a model and its reasoning effort, then test the connection. Models and effort
 options come from your installed Codex runtime. See [setup and behavior](docs/chatgpt-codex.md).
+Codex is a coding agent: its read-only sandbox can still read local files through
+native tools. Review the linked privacy and tool-access notes before enabling it.
 
 1. In Settings → Spider Chat, configure the default model's API URL, key, and model name. OpenAI-compatible Chat Completions endpoints are supported. Keys may also come from a `.env` file in the plugin folder or vault.
 2. Use the ribbon icon to create a map and ask the first question.

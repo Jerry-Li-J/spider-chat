@@ -4,6 +4,7 @@
 `codex login` 的登录，无需 API Key。刷新模型列表后选择模型和推理强度，再测试连接。
 模型及推理强度选项由本机 Codex 动态提供，回答与推理摘要分开显示，支持停止生成。
 详见[连接说明](docs/chatgpt-codex.md)。
+Codex 是编程代理；即使使用只读沙箱，其原生工具仍可能读取本地文件。启用前请阅读连接说明中的隐私与工具访问提示。
 
 [English](README.md) · [图谱存档格式](docs/map-archive.md) · [MIT 许可证](LICENSE)
 

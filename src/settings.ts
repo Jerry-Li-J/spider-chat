@@ -297,8 +297,8 @@ export class BranchChatMapSettingTab extends PluginSettingTab {
       new Setting(card)
         .setName(label(language, "ChatGPT 账号", "ChatGPT account"))
         .setDesc(label(language,
-          "使用本机 Codex 登录。请先运行 codex login；无需填写 API Key。仅支持桌面版。刷新模型列表后选择模型。",
-          "Uses your local Codex login. Run codex login first; no API key is needed. Desktop only. Refresh the model list, then choose a model."));
+          "使用本机 Codex 登录，无需 API Key，仅支持桌面版。先运行 codex login，再刷新模型。只读沙箱仍可能允许 Codex 原生工具读取本地文件；使用前请查看 README 的连接说明。",
+          "Uses your local Codex login without an API key. Desktop only: run codex login, then refresh models. Native Codex tools may still read local files in a read-only sandbox; see the connection guide before use."));
       this.addProfileText(profile, "codexPath", label(language, "Codex 可执行文件路径", "Codex executable path"),
         label(language, "留空自动查找", "Leave blank to detect automatically"), undefined, false, card);
     } else {
