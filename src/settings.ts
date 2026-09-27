@@ -403,7 +403,8 @@ export class BranchChatMapSettingTab extends PluginSettingTab {
     testSetting.addButton((button) => {
       const testing = this.isTestingProfileId === profile.id;
       button
-        .setButtonText(testing ? t(language, "apiTesting") : t(language, "apiTest"))
+        .setButtonText(testing ? t(language, "apiTesting") : isCodex
+          ? label(language, "检查连接", "Check connection") : t(language, "apiTest"))
         .setDisabled(testing)
         .onClick(async () => {
           this.isTestingProfileId = profile.id;

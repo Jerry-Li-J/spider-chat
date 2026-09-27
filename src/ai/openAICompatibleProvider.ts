@@ -322,7 +322,9 @@ export class OpenAICompatibleProvider implements AiProvider {
     if (profile?.provider === "codex-app-server") {
       try {
         await testCodexConnection(profile, signal);
-        return { ok: true, message: t(this.settings.language, "apiTestSuccess") };
+        return { ok: true, message: this.settings.language === "zh-CN"
+          ? "Codex 已连接，ChatGPT 登录和所选模型可用。"
+          : "Codex connected. ChatGPT login and the selected model are available." };
       } catch (error) { return errorToTestResult(error, this.settings.language); }
     }
     const validation = validateSettings(this.settings, profile);
